@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom"; // Remove HashRouter import
 import LoanCalculator from "./components/LoanCalculator";
 import ExchangeRates from "./components/ExchangeRates";
 import About from "./components/About";
 import NotFound from "./components/NotFound";
 import ErrorPage from "./components/ErrorPage";
 import Header from "./components/Header";
-import { AppProvider } from "./contexts/AppContext";
 import { CssBaseline } from "@mui/material";
 
 function App() {
@@ -14,15 +13,15 @@ function App() {
 
 	if (errorState) {
 		return (
-			<AppProvider>
+			<>
 				<CssBaseline />
 				<ErrorPage error={errorState} resetError={() => setErrorState(null)} />
-			</AppProvider>
+			</>
 		);
 	}
 
 	return (
-		<AppProvider>
+		<>
 			<CssBaseline />
 			<div className="App">
 				<Header
@@ -39,7 +38,7 @@ function App() {
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</div>
-		</AppProvider>
+		</>
 	);
 }
 

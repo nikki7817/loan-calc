@@ -5,14 +5,14 @@ import "./app.css";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { AppProvider } from "./contexts/AppContext.jsx";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom"; // Change this line
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		<BrowserRouter>
+		<HashRouter basename="/">
 			<AppProvider>
 				<App />
 			</AppProvider>
-		</BrowserRouter>
+		</HashRouter>
 	</StrictMode>
 );
