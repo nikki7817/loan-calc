@@ -4,7 +4,7 @@ A modern, responsive single-page application built with **React** and **Material
 
 ## 🚀 Live Demo
 
-👉 [View Live App](https://your-live-app-link.com)
+👉 [View Live App](https://nikki7817.github.io/loan-calc/)
 
 ---
 
