@@ -27,6 +27,7 @@ const LoanCalculator = ({ onError }) => {
 	const [emi, setEmi] = useState(0);
 	const [currency, setCurrency] = useState("USD");
 	const [amortizationSchedule, setAmortizationSchedule] = useState([]);
+	const [calculated, setCalculated] = useState(false);
 
 	const { calculateEmi, generateAmortizationSchedule } = useEmiCalculator();
 	const { exchangeRates, loading } = useExchangeRates();
@@ -41,6 +42,7 @@ const LoanCalculator = ({ onError }) => {
 				loanTerm
 			);
 			setAmortizationSchedule(schedule);
+			setCalculated(true);
 		} catch (error) {
 			onError("Error calculating loan: " + error.message);
 		}
@@ -49,6 +51,7 @@ const LoanCalculator = ({ onError }) => {
 	const handleResetTable = () => {
 		setAmortizationSchedule([]);
 		setEmi(0);
+		setCalculated(false);
 	};
 
 	const convertCurrency = (amount) => {
@@ -104,83 +107,87 @@ const LoanCalculator = ({ onError }) => {
 				CALCULATE
 			</Button>
 
-			<Typography variant="h6" gutterBottom>
-				Monthly EMI: {currency} {convertCurrency(emi.toFixed(2))}
-			</Typography>
-
-			<Grid container spacing={3} sx={{ mb: 3 }}>
-				<Grid item xs={6} sm={3}>
-					<FormControl fullWidth>
-						<InputLabel id="currency-label">Currency</InputLabel>
-						<Select
-							labelId="currency-label"
-							value={currency}
-							label="Currency"
-							onChange={(e) => setCurrency(e.target.value)}
-						>
-							<MenuItem value="USD">USD</MenuItem>
-							<MenuItem value="EUR">EUR</MenuItem>
-							<MenuItem value="GBP">GBP</MenuItem>
-							<MenuItem value="JPY">JPY</MenuItem>
-							<MenuItem value="INR">INR</MenuItem>
-						</Select>
-					</FormControl>
-				</Grid>
-				<Grid
-					item
-					xs={6}
-					sm={3}
-					sx={{
-						display: "flex",
-						justifyContent: "flex-end",
-						alignItems: "center",
-						ml: "auto",
-					}}
-				>
-					<Button
-						variant="outlined"
-						color="secondary"
-						onClick={handleResetTable}
-					>
-						RESET TABLE
-					</Button>
-				</Grid>
-			</Grid>
-
-			{amortizationSchedule.length > 0 && (
-				<Paper sx={{ width: "100%", overflow: "hidden" }}>
-					<Typography variant="h6" gutterBottom sx={{ p: 2 }}>
-						Amortization Schedule ({currency})
+			{calculated && (
+				<>
+					<Typography variant="h6" gutterBottom>
+						Monthly EMI: {currency} {convertCurrency(emi.toFixed(2))}
 					</Typography>
-					<TableContainer sx={{ maxHeight: 440 }}>
-						<Table stickyHeader aria-label="amortization table">
-							<TableHead>
-								<TableRow>
-									<TableCell>Month</TableCell>
-									<TableCell>Principal</TableCell>
-									<TableCell>Interest</TableCell>
-									<TableCell>Remaining Balance</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{amortizationSchedule.map((row) => (
-									<TableRow key={row.month}>
-										<TableCell>{row.month}</TableCell>
-										<TableCell>
-											{currency} {convertCurrency(row.principalPaid)}
-										</TableCell>
-										<TableCell>
-											{currency} {convertCurrency(row.interest)}
-										</TableCell>
-										<TableCell>
-											{currency} {convertCurrency(row.balance)}
-										</TableCell>
-									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				</Paper>
+
+					<Grid container spacing={3} sx={{ mb: 3 }}>
+						<Grid item xs={6} sm={3}>
+							<FormControl fullWidth>
+								<InputLabel id="currency-label">Currency</InputLabel>
+								<Select
+									labelId="currency-label"
+									value={currency}
+									label="Currency"
+									onChange={(e) => setCurrency(e.target.value)}
+								>
+									<MenuItem value="USD">USD</MenuItem>
+									<MenuItem value="EUR">EUR</MenuItem>
+									<MenuItem value="GBP">GBP</MenuItem>
+									<MenuItem value="JPY">JPY</MenuItem>
+									<MenuItem value="INR">INR</MenuItem>
+								</Select>
+							</FormControl>
+						</Grid>
+						<Grid
+							item
+							xs={6}
+							sm={3}
+							sx={{
+								display: "flex",
+								justifyContent: "flex-end",
+								alignItems: "center",
+								ml: "auto",
+							}}
+						>
+							<Button
+								variant="outlined"
+								color="secondary"
+								onClick={handleResetTable}
+							>
+								RESET TABLE
+							</Button>
+						</Grid>
+					</Grid>
+
+					{amortizationSchedule.length > 0 && (
+						<Paper sx={{ width: "100%", overflow: "hidden" }}>
+							<Typography variant="h6" gutterBottom sx={{ p: 2 }}>
+								Amortization Schedule ({currency})
+							</Typography>
+							<TableContainer sx={{ maxHeight: 440 }}>
+								<Table stickyHeader aria-label="amortization table">
+									<TableHead>
+										<TableRow>
+											<TableCell>Month</TableCell>
+											<TableCell>Principal</TableCell>
+											<TableCell>Interest</TableCell>
+											<TableCell>Remaining Balance</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{amortizationSchedule.map((row) => (
+											<TableRow key={row.month}>
+												<TableCell>{row.month}</TableCell>
+												<TableCell>
+													{currency} {convertCurrency(row.principalPaid)}
+												</TableCell>
+												<TableCell>
+													{currency} {convertCurrency(row.interest)}
+												</TableCell>
+												<TableCell>
+													{currency} {convertCurrency(row.balance)}
+												</TableCell>
+											</TableRow>
+										))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						</Paper>
+					)}
+				</>
 			)}
 		</Box>
 	);
