@@ -6,17 +6,17 @@ import About from "./components/About";
 import NotFound from "./components/NotFound";
 import ErrorPage from "./components/ErrorPage";
 import Header from "./components/Header";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Container } from "@mui/material"; // Re-add Container import
 
 function App() {
 	const [errorState, setErrorState] = useState(null);
 
 	if (errorState) {
 		return (
-			<>
+			<Container>
 				<CssBaseline />
 				<ErrorPage error={errorState} resetError={() => setErrorState(null)} />
-			</>
+			</Container>
 		);
 	}
 
@@ -31,12 +31,14 @@ function App() {
 						window.location.hash = page === "home" ? "/" : `/${page}`;
 					}}
 				/>
-				<Routes>
-					<Route path="/" element={<LoanCalculator />} />
-					<Route path="/exchange" element={<ExchangeRates />} />
-					<Route path="/about" element={<About />} />
-					<Route path="*" element={<NotFound />} />
-				</Routes>
+				<Container>
+					<Routes>
+						<Route path="/" element={<LoanCalculator />} />
+						<Route path="/exchange" element={<ExchangeRates />} />
+						<Route path="/about" element={<About />} />
+						<Route path="*" element={<NotFound />} />
+					</Routes>
+				</Container>
 			</div>
 		</>
 	);
