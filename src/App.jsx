@@ -22,26 +22,24 @@ function App() {
 	}
 
 	return (
-		<Router>
-			<AppProvider>
-				<CssBaseline />
-				<div className="App">
-					<Header
-						currentPage={window.location.hash.replace("#", "") || "/"}
-						onPageChange={(page) => {
-							// Navigate programmatically if needed
-							window.location.hash = page === "home" ? "/" : `/${page}`;
-						}}
-					/>
-					<Routes>
-						<Route path="/" element={<LoanCalculator />} />
-						<Route path="/exchange" element={<ExchangeRates />} />
-						<Route path="/about" element={<About />} />
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-				</div>
-			</AppProvider>
-		</Router>
+		<AppProvider>
+			<CssBaseline />
+			<div className="App">
+				<Header
+					currentPage={window.location.hash.replace("#", "") || "/"}
+					onPageChange={(page) => {
+						// Navigate programmatically if needed
+						window.location.hash = page === "home" ? "/" : `/${page}`;
+					}}
+				/>
+				<Routes>
+					<Route path="/" element={<LoanCalculator />} />
+					<Route path="/exchange" element={<ExchangeRates />} />
+					<Route path="/about" element={<About />} />
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</div>
+		</AppProvider>
 	);
 }
 
