@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { Container, CssBaseline } from "@mui/material";
-import { AppProvider } from "./contexts/AppContext";
-import Header from "./components/Header";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import LoanCalculator from "./components/LoanCalculator";
 import ExchangeRates from "./components/ExchangeRates";
 import About from "./components/About";
 import NotFound from "./components/NotFound";
 import ErrorPage from "./components/ErrorPage";
-import { Routes, Route } from "react-router-dom"; // Import Routes and Route from React Router
+import Header from "./components/Header";
+import { AppProvider } from "./contexts/AppContext";
+import { CssBaseline } from "@mui/material";
 
 function App() {
 	const [errorState, setErrorState] = useState(null);
 
-	// If there's an error, render the ErrorPage
 	if (errorState) {
 		return (
 			<AppProvider>
@@ -23,28 +22,26 @@ function App() {
 	}
 
 	return (
-		<AppProvider>
-			<CssBaseline />
-			<div className="App">
-				<Header />
-				<Container sx={{ mt: 4, mb: 4 }}>
-					{/* Define routes using React Router */}
+		<Router>
+			<AppProvider>
+				<CssBaseline />
+				<div className="App">
+					<Header
+						currentPage={window.location.hash.replace("#", "") || "/"}
+						onPageChange={(page) => {
+							// Navigate programmatically if needed
+							window.location.hash = page === "home" ? "/" : `/${page}`;
+						}}
+					/>
 					<Routes>
-						<Route
-							path="/"
-							element={<LoanCalculator onError={setErrorState} />}
-						/>
-						<Route
-							path="/exchange"
-							element={<ExchangeRates onError={setErrorState} />}
-						/>
+						<Route path="/" element={<LoanCalculator />} />
+						<Route path="/exchange" element={<ExchangeRates />} />
 						<Route path="/about" element={<About />} />
-						{/* Catch-all route for 404 */}
 						<Route path="*" element={<NotFound />} />
 					</Routes>
-				</Container>
-			</div>
-		</AppProvider>
+				</div>
+			</AppProvider>
+		</Router>
 	);
 }
 
